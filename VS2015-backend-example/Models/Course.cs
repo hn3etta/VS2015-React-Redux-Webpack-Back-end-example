@@ -20,6 +20,9 @@ namespace BackendStarter.Models
 
         [Required]
         public string Category { get; set; }
+
+        [Required]
+        public bool IsOpen { get; set; }
     }
 
 }

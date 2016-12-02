@@ -23,15 +23,6 @@ namespace BackendStarter.Controllers
             };
         }
 
-        // Get latest Signups
-        [HttpGet("{id}")]
-        [EnableCors("AllowAll")]
-        [Authorize(Policy = "BaselineAPI")]
-        public IActionResult Get(int id)
-        {
-            return new OkObjectResult(_courseOpenRepo.Get(id));
-        }
-
         // Get latest Signups for list of Courses
         [HttpGet]
         [EnableCors("AllowAll")]
@@ -41,5 +32,59 @@ namespace BackendStarter.Controllers
             return new OkObjectResult(_courseOpenRepo.GetAll());
         }
 
+        // Get latest Signups
+        [HttpGet("{id}")]
+        [EnableCors("AllowAll")]
+        [Authorize(Policy = "BaselineAPI")]
+        public IActionResult Get(int id)
+        {
+            return new OkObjectResult(_courseOpenRepo.Get(id));
+        }
+
+        // Update a Course Open
+        [HttpPost]
+        [EnableCors("AllowAll")]
+        [Authorize(Policy = "BaselineAPI")]
+        public IActionResult Post([FromBody] CourseOpen openCourse)
+        {
+            if (ModelState.IsValid)
+            {
+                int id = _courseOpenRepo.SetCourseOpen(openCourse);
+                if (id > 0)
+                {
+                    openCourse.Id = id;
+                    return new CreatedResult("/courseopen/post", openCourse);
+                }
+                else
+                {
+                    return new NotFoundResult();
+                }
+
+            }
+
+            return BadRequest("Invalid Course Open Model");
+        }
+
+
+        // Delete a Course
+        [HttpDelete("{id}")]
+        [EnableCors("AllowAll")]
+        [Authorize(Policy = "BaselineAPI")]
+        public IActionResult Delete(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                if (_courseOpenRepo.DeleteCourseOpen(id))
+                {
+                    return new OkResult();
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+
+            return BadRequest("Invalid Course Open Model");
+        }
     }
 }

@@ -57,7 +57,7 @@ namespace BackendStarter.Repos
 
         public IEnumerable<CourseOpen> GetAll()
         {
-            return _allCoursesOpen.OrderBy(d => d.Id);
+            return _allCoursesOpen;
         }
 
         public CourseOpen Get(int id)
@@ -71,5 +71,55 @@ namespace BackendStarter.Repos
             return co;
         }
 
+        public bool CourseOpenExists(int courseId)
+        {
+            return _allCoursesOpen.Where(d => d.CourseId == courseId).Count() > 0;
+        }
+
+        public int SetCourseOpen(CourseOpen courseOpen)
+        {
+            var id = 0;
+            if (_allCoursesOpen.Where(d => d.CourseId == courseOpen.CourseId).Count() == 0)
+            {
+                id = _allCoursesOpen.OrderByDescending(d => d.Id).Select(d => d.Id).FirstOrDefault() + 1;
+                _allCoursesOpen.Add(
+                    new CourseOpen()
+                    {
+                        Id = id,
+                        CourseId = courseOpen.CourseId,
+                        Attendees = courseOpen.Attendees,
+                        MaxAttendees = courseOpen.MaxAttendees
+                    }
+                );
+                return id;
+            }
+
+            _allCoursesOpen = _allCoursesOpen.Select(d =>
+            {
+                if (d.CourseId == courseOpen.CourseId)
+                {
+                    id = courseOpen.Id;
+                    d.Attendees = courseOpen.Attendees;
+                    d.MaxAttendees = courseOpen.MaxAttendees;
+                    return d;
+                }
+
+                return d;
+            }).ToList();
+
+            return id;
+        }
+
+        public bool DeleteCourseOpen(int id)
+        {
+            if (_allCoursesOpen.Where(d => d.Id == id).Count() == 0)
+            {
+                return false;
+            }
+
+            _allCoursesOpen = _allCoursesOpen.Where(d => d.Id != id).ToList();
+
+            return true;
+        }
     }
 }

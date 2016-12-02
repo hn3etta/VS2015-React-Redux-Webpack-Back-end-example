@@ -9,11 +9,14 @@ namespace BackendStarter.Repos
     public class CourseRepo : ICourseRepo
     {
         private List<Course> _allCourses;
+        private readonly ICourseOpenRepo _courseOpenRepo;
 
-        public CourseRepo()
+        public CourseRepo(ICourseOpenRepo SignupsRepo)
         {
+            _courseOpenRepo = SignupsRepo;
             _allCourses = new List<Course>()
             {
+
                 new Course()
                 {
                     Id = 0,
@@ -64,12 +67,26 @@ namespace BackendStarter.Repos
 
         public IEnumerable<Course> GetAll()
         {
-            return _allCourses.OrderBy(c => c.Title);
+            return _allCourses.Select(x => {
+                if (_courseOpenRepo.CourseOpenExists(x.Id)) {
+                    x.IsOpen = true;
+                } else {
+                    x.IsOpen = false;
+                }
+                return x;
+            });
         }
 
         public Course Get(int id)
         {
-            return _allCourses.Where(c => c.Id == id).FirstOrDefault();
+            var course = _allCourses.Where(c => c.Id == id).FirstOrDefault();
+
+            if(course != null)
+            {
+                course.IsOpen = _courseOpenRepo.CourseOpenExists(course.Id);
+            }
+
+            return course;
         }
 
         public int Add(Course newCourse)

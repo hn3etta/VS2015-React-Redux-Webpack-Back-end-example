@@ -5,7 +5,14 @@ namespace BackendStarter.Repos
 {
     public interface ICourseOpenRepo
     {
-        CourseOpen Get(int id);
         IEnumerable<CourseOpen> GetAll();
+
+        CourseOpen Get(int id);
+
+        bool CourseOpenExists(int id);
+
+        int SetCourseOpen(CourseOpen courseOpen);
+
+        bool DeleteCourseOpen(int id);
     }
 }
