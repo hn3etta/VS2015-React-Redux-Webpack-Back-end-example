@@ -121,5 +121,17 @@ namespace BackendStarter.Repos
 
             return true;
         }
+
+        public bool DeleteCourseOpenByCourseId(int courseId)
+        {
+            if (_allCoursesOpen.Where(d => d.CourseId == courseId).Count() == 0)
+            {
+                return false;
+            }
+
+            _allCoursesOpen = _allCoursesOpen.Where(d => d.CourseId != courseId).ToList();
+
+            return true;
+        }
     }
 }
