@@ -127,6 +127,7 @@ namespace BackendStarter.Repos
             if (delCourse != null)
             {
                 _allCourses.Remove(delCourse);
+                _courseOpenRepo.DeleteCourseOpenByCourseId(id);
                 return true;
             }
 

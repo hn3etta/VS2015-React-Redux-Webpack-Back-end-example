@@ -14,5 +14,7 @@ namespace BackendStarter.Repos
         int SetCourseOpen(CourseOpen courseOpen);
 
         bool DeleteCourseOpen(int id);
+
+        bool DeleteCourseOpenByCourseId(int courseId);
     }
 }
