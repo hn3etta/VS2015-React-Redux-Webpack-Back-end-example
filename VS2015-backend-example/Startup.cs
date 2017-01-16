@@ -73,7 +73,7 @@ namespace BackendStarter
             services.AddCors(options =>
                 options.AddPolicy("AllowAll", p =>
                 {
-                    p.WithOrigins(new string[] { "http://127.0.0.1:3002" });
+                    p.WithOrigins(new string[] { "http://localhost:3000", "http://127.0.0.1:3000" });
                     p.AllowAnyMethod();
                     p.AllowCredentials();
                     p.AllowAnyHeader();
