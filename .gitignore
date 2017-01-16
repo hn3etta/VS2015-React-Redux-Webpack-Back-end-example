@@ -1,5 +1,6 @@
-# bin directory
-VS2015-backend-example/bin/
-VS2015-backend-example/obj/
-
-VS2015-backend-example/project.lock.json
+# ignore VS2015 configurations
+.vs/
+bin/
+obj/
+*.xproj.user
+project.lock.json
