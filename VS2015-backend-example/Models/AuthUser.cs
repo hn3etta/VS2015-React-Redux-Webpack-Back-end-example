@@ -1,8 +1,13 @@
-﻿namespace BackendStarter.Models
+using System.ComponentModel.DataAnnotations;
+
+namespace BackendStarter.Models
 {
-  public class AuthUser
-  {
-    public string UserName { get; set; }
-    public string Password { get; set; }
-  }
+	public class AuthUser
+	{
+		[Required]
+		public string UserName { get; set; }
+
+		[Required]
+		public string Password { get; set; }
+	}
 }

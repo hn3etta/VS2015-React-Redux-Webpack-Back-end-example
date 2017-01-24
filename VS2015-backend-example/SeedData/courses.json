@@ -1,0 +1,37 @@
+[
+  {
+    "authorId": 1,
+    "title": "Building Applications in React and Flux",
+    "watchHref": "http://www.pluralsight.com/courses/react-flux-building-applications",
+    "category": "JavaScript",
+    "length": "5:08"
+  },
+  {
+    "authorId": 1,
+    "title": "Clean Code: Writing Code for Humans",
+    "watchHref": "http://www.pluralsight.com/courses/writing-clean-code-humans",
+    "category": "Software Practices",
+    "length": "3:10"
+  },
+  {
+    "authorId": 1,
+    "title": "Architecting Applications for the Real World",
+    "watchHref": "http://www.pluralsight.com/courses/architecting-applications-dotnet",
+    "category": "Software Architecture",
+    "length": "2:52"
+  },
+  {
+    "authorId": 1,
+    "title": "Becoming an Outlier: Reprogramming the Developer Mind",
+    "watchHref": "http://www.pluralsight.com/courses/career-reboot-for-developer-mind",
+    "category": "Career",
+    "length": "2:30"
+  },
+  {
+    "authorId": 1,
+    "title": "Web Component Fundamentals",
+    "watchHref": "http://www.pluralsight.com/courses/web-components-shadow-dom",
+    "category": "HTML5",
+    "length": "5:10"
+  }
+]

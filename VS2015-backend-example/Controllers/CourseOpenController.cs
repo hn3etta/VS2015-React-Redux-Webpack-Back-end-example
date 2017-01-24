@@ -2,89 +2,84 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using BackendStarter.Models;
 using BackendStarter.Repos;
 
 namespace BackendStarter.Controllers
 {
-    [Route("api/[controller]")]
-    public class CourseOpenController : Controller
-    {
-        private readonly ICourseOpenRepo _courseOpenRepo;
-        private readonly JsonSerializerSettings _serializerSettings;
+	[Route("api/[controller]")]
+	public class CourseOpenController : Controller
+	{
+		private readonly ICourseOpenRepo openCourses;
+		private readonly JsonSerializerSettings _serializerSettings;
 
-        public CourseOpenController(ICourseOpenRepo SignupsRepo)
-        {
-            _courseOpenRepo = SignupsRepo;
-            _serializerSettings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented
-            };
-        }
+		public CourseOpenController(ICourseOpenRepo openCoursesRepo)
+		{
+			openCourses = openCoursesRepo;
+			_serializerSettings = new JsonSerializerSettings
+			{
+				Formatting = Formatting.Indented
+			};
+		}
 
-        // Get latest Signups for list of Courses
-        [HttpGet]
-        [EnableCors("AllowAll")]
-        [Authorize(Policy = "BaselineAPI")]
-        public IActionResult Get()
-        {
-            return new OkObjectResult(_courseOpenRepo.GetAll());
-        }
+		// Get latest Signups for list of Courses
+		[HttpGet]
+		[EnableCors("AllowAll")]
+		[Authorize(Policy = "BaselineAPI")]
+		public IActionResult Get()
+		{
+			return new OkObjectResult(openCourses.GetAll());
+		}
 
-        // Get latest Signups
-        [HttpGet("{id}")]
-        [EnableCors("AllowAll")]
-        [Authorize(Policy = "BaselineAPI")]
-        public IActionResult Get(int id)
-        {
-            return new OkObjectResult(_courseOpenRepo.Get(id));
-        }
+		// Get latest Signups
+		[HttpGet("{id}")]
+		[EnableCors("AllowAll")]
+		[Authorize(Policy = "BaselineAPI")]
+		public IActionResult Get(int id)
+		{
+			return new OkObjectResult(openCourses.Get(id));
+		}
 
-        // Update a Course Open
-        [HttpPost]
-        [EnableCors("AllowAll")]
-        [Authorize(Policy = "BaselineAPI")]
-        public IActionResult Post([FromBody] CourseOpen openCourse)
-        {
-            if (ModelState.IsValid)
-            {
-                int id = _courseOpenRepo.SetCourseOpen(openCourse);
-                if (id > 0)
-                {
-                    openCourse.Id = id;
-                    return new CreatedResult("/courseopen/post", openCourse);
-                }
-                else
-                {
-                    return new NotFoundResult();
-                }
+		// Update a Course Open
+		[HttpPost]
+		[EnableCors("AllowAll")]
+		[Authorize(Policy = "BaselineAPI")]
+		public IActionResult Post([FromBody] OpenCourse openCourse)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest("Invalid Course Open Model");
+			}
 
-            }
+			var result = openCourses.Add(openCourse);
 
-            return BadRequest("Invalid Course Open Model");
-        }
+			if (result == null)
+			{
+				return new NotFoundResult();
+			}
 
+			return new CreatedResult("/courseopen/post", openCourse);
+		}
 
-        // Delete a Course
-        [HttpDelete("{id}")]
-        [EnableCors("AllowAll")]
-        [Authorize(Policy = "BaselineAPI")]
-        public IActionResult Delete(int id)
-        {
-            if (ModelState.IsValid)
-            {
-                if (_courseOpenRepo.DeleteCourseOpen(id))
-                {
-                    return new OkResult();
-                }
-                else
-                {
-                    return NoContent();
-                }
-            }
+		// Delete a Course
+		[HttpDelete("{id}")]
+		[EnableCors("AllowAll")]
+		[Authorize(Policy = "BaselineAPI")]
+		public IActionResult Delete(int id)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest("Invalid Course Open Model");
+			}
 
-            return BadRequest("Invalid Course Open Model");
-        }
-    }
+			var result = openCourses.Delete(id);
+
+			if (!result)
+			{
+				return NoContent();
+			}
+
+			return new OkResult();
+		}
+	}
 }

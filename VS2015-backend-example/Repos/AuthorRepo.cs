@@ -1,86 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using BackendStarter.Models;
 
 namespace BackendStarter.Repos
 {
-    public class AuthorRepo : IAuthorRepo
-    {
-        private List<Author> _allAuthors;
-        public AuthorRepo()
-        {
-            _allAuthors = new List<Author>()
-            {
-                new Author() {
-                    Id = 0,
-                    FirstName = "Cory",
-                    LastName = "House"
-                },
-                new Author() {
-                    Id = 1,
-                    FirstName = "Scott",
-                    LastName = "Allen"
-                },
-                new Author() {
-                    Id = 2,
-                    FirstName = "Dan",
-                    LastName = "Wahlin"
-                }
-            };
-        }
+	public class AuthorRepo : IAuthorRepo
+	{
+		BackendStarterContext db;
 
-        public IEnumerable<Author> GetAll()
-        {
-            return _allAuthors.OrderBy(a => a.LastName);
-        }
+		public AuthorRepo(BackendStarterContext context)
+		{
+			db = context;
+		}
 
-        public Author Get(int id)
-        {
-            return _allAuthors.Where(a => a.Id == id).FirstOrDefault();
-        }
+		public Author Add(Author author)
+		{
+			db.Authors.Add(author);
+			db.SaveChanges();
+			return author;
+		}
 
-        public int Add(Author newAuthor)
-        {
-            int newId = _allAuthors.OrderByDescending(a => a.Id).Select(a => a.Id).FirstOrDefault() + 1;
-            newAuthor.Id = newId;
-            _allAuthors.Add(newAuthor);
+		public bool Delete(int id)
+		{
+			var author = db.Authors.Find(id);
 
-            return newId;
-        }
+			if (author == null)
+			{
+				return false;
+			}
 
-        public bool Save(Author updAuthor)
-        {
-            var currAuthor = _allAuthors.Where(a => a.Id == updAuthor.Id).FirstOrDefault();
-            if (currAuthor != null)
-            {
-                currAuthor.FirstName = updAuthor.FirstName;
-                currAuthor.LastName = updAuthor.LastName;
-                return true;
-            }
+			db.Authors.Remove(author);
+			return db.SaveChanges() > 0;
+		}
 
-            return false;
-        }
+		public bool DeleteAll()
+		{
+			db.Authors.RemoveRange(db.Authors);
+			return db.SaveChanges() > 0;
+		}
 
-        public bool Delete()
-        {
-            _allAuthors.Clear();
+		public Author Get(int id)
+		{
+			return db.Authors.Find(id);
+		}
 
-            return true;
-        }
+		public IEnumerable<Author> GetAll()
+		{
+			return db.Authors.ToList();
+		}
 
-        public bool Delete(int id)
-        {
-            var delAuthor = _allAuthors.Where(a => a.Id == id).FirstOrDefault();
-            if (delAuthor != null)
-            {
-                _allAuthors.Remove(delAuthor);
-                return true;
-            }
-
-            return false;
-        }
-
-    }
+		public Author Save(Author author)
+		{
+			db.Authors.Update(author);
+			db.SaveChanges();
+			return author;
+		}
+	}
 }

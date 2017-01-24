@@ -3,13 +3,13 @@ using BackendStarter.Models;
 
 namespace BackendStarter.Repos
 {
-    public interface ICourseRepo
-    {
-        int Add(Course newCourse);
-        bool Delete();
-        bool Delete(int id);
-        Course Get(int id);
-        IEnumerable<Course> GetAll();
-        bool Save(Course updCourse);
-    }
+	public interface ICourseRepo
+	{
+		Course Add(Course course);
+		bool Delete(int id);
+		bool DeleteAll();
+		Course Get(int id);
+		IEnumerable<Course> GetAll();
+		Course Save(Course course);
+	}
 }
